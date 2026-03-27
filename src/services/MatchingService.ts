@@ -25,7 +25,7 @@ export class MatchingService {
     settings: AppSettings
   ): MatchResult {
     // Bỏ qua nếu ứng dụng đang bị vô hiệu hóa
-    if (!settings.isAppEnabled) {
+    if (!settings.isServiceEnabled) {
       return { isBlocked: false, similarity: 0 };
     }
 
@@ -38,10 +38,7 @@ export class MatchingService {
     let fallbackResult: MatchResult = { isBlocked: false, similarity: 0 };
 
     for (const blocked of blockedNumbers) {
-      // Bỏ qua rule nếu nó bị vô hiệu hóa
-      if (!blocked.isActive) continue;
-
-      const normalizedPattern = normalizePhoneNumber(blocked.numberPattern);
+      const normalizedPattern = normalizePhoneNumber(blocked.rawNumber);
       if (!normalizedPattern) continue;
 
       const similarity = calculateSimilarityPercentage(normalizedIncoming, normalizedPattern);
@@ -51,8 +48,8 @@ export class MatchingService {
         fallbackResult = {
           isBlocked: similarity >= settings.rating,
           similarity,
-          matchedPattern: blocked.numberPattern,
-          matchedConfigName: blocked.name
+          matchedPattern: blocked.rawNumber,
+          matchedConfigName: blocked.label || 'Unknown Rule'
         };
       }
 

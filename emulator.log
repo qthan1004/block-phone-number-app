@@ -27,3 +27,5 @@ WARNING | Cold boot:  requested by the user
 INFO    | Activated packet streamer for bluetooth emulation
 INFO    | Boot completed in 26950 ms
 INFO    | Increasing screen off timeout, logcat buffer size to 2M.
+INFO    | Info: Sandboxing disabled by user. ((null):0, (null))
+INFO    | Critical: Uncaught SyntaxError: Unexpected token ? (https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyABrfflV49aFWF4Kohsf1VSx68td8f-sFY&callback=initMap&v=3.53:38, (null))

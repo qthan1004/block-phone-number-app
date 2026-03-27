@@ -3,27 +3,32 @@ import { BlockedNumber, AppSettings } from '../types';
 
 describe('MatchingService', () => {
   const defaultSettings: AppSettings = {
-    isAppEnabled: true,
-    rating: 75
+    isServiceEnabled: true,
+    rating: 75,
+    notifyOnBlock: true
   };
 
   const blockedList: BlockedNumber[] = [
     {
       id: '1',
-      name: 'Spammer 1',
-      numberPattern: '0987654321', // Length 10
-      isActive: true
+      label: 'Spammer 1',
+      rawNumber: '0987654321', // Length 10
+      phoneNumber: '0987654321',
+      createdAt: 0,
+      updatedAt: 0
     },
     {
       id: '2',
-      name: 'Inactive Spammer',
-      numberPattern: '0123456789', // Length 10
-      isActive: false
+      label: 'Inactive Spammer',
+      rawNumber: '0123456789', // Length 10
+      phoneNumber: '0123456789',
+      createdAt: 0,
+      updatedAt: 0
     }
   ];
 
   it('should allow call if app is disabled', () => {
-    const result = MatchingService.checkCall('0987654321', blockedList, { ...defaultSettings, isAppEnabled: false });
+    const result = MatchingService.checkCall('0987654321', blockedList, { ...defaultSettings, isServiceEnabled: false });
     expect(result.isBlocked).toBe(false);
   });
 
@@ -32,11 +37,6 @@ describe('MatchingService', () => {
     expect(result.isBlocked).toBe(true);
     expect(result.similarity).toBe(100);
     expect(result.matchedConfigName).toBe('Spammer 1');
-  });
-
-  it('should not block call if it matches an inactive pattern', () => {
-    const result = MatchingService.checkCall('0123456789', blockedList, defaultSettings);
-    expect(result.isBlocked).toBe(false);
   });
 
   it('should format +84 before matching', () => {
