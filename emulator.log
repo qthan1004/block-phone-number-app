@@ -1,0 +1,29 @@
+nohup: ignoring input
+INFO    | Storing crashdata in: /tmp/android-administrator/emu-crash-34.1.19.db, detection is enabled for process: 65797
+INFO    | Android emulator version 34.1.19.0 (build_id 11525734) (CL:N/A)
+INFO    | Found systemPath /home/administrator/Android/Sdk/system-images/android-34/google_apis/x86_64/
+WARNING | Your GPU drivers may have a bug. Switching to software rendering.
+INFO    | Storing crashdata in: /tmp/android-administrator/emu-crash-34.1.19.db, detection is enabled for process: 65797
+INFO    | Duplicate loglines will be removed, if you wish to see each individual line launch with the -log-nofilter flag.
+INFO    | Increasing RAM size to 2048MB
+library_mode swangle_indirect gpu mode swangle_indirect
+Initializing hardware OpenGLES emulation supportandroid_startOpenglesRenderer: gpu infoI0327 15:01:23.256565   65797 HealthMonitor.cpp:279] HealthMonitor disabled.
+I0327 15:01:23.265899   65797 FrameBuffer.cpp:486] Graphics Adapter Vendor Google (Google Inc.)
+I0327 15:01:23.265917   65797 FrameBuffer.cpp:487] Graphics Adapter Android Emulator OpenGL ES Translator (Google SwiftShader)
+I0327 15:01:23.265921   65797 FrameBuffer.cpp:488] Graphics API Version OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)
+I0327 15:01:23.265924   65797 FrameBuffer.cpp:489] Graphics API Extensions GL_OES_EGL_sync GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_depth24 GL_OES_depth32 GL_OES_element_index_uint GL_OES_texture_float GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_packed_depth_stencil GL_OES_vertex_half_float GL_OES_standard_derivatives GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_texture_format_BGRA8888 GL_APPLE_texture_format_BGRA8888 
+I0327 15:01:23.265927   65797 FrameBuffer.cpp:490] Graphics Device Extensions N/A
+OpenGL Vendor=[Google (Google Inc.)]OpenGL Renderer=[Android Emulator OpenGL ES Translator (Google SwiftShader)]OpenGL Version=[OpenGL ES 3.0 (OpenGL ES 3.0 SwiftShader 4.0.0.1)]INFO    | Sending adb public key [QAAAAD9q5uVBeuNkxVy7PmKsKRIFOCDlZkse++mMMwhoALOtcGBeJawLadbkIvch6vouaxDcbUD0FSpDUmzjTcLNkgehsT5cNFFs9/IIBr3KqmFt/UlU3k7D9WN/YZQarrz78FL79CKJA+xaLzjCOLszkUnpw7df2Ni5Kk8K8FMt069mvIYiqrYQTJIm1+Sbff/CQsDROWCxMLqlASyaTiZ94iuL0E/4V3iqQAyrrdCDnLrR8TlGnyIJzfUWGvrGUaj3DOmJAQRj9PusXV6Mmh8lDq87JcyVjW3b2qQ6TanhLhY8yBMuPpuEYG0+mSwsBF4XnhM+yV2U4piFI8HhDJi73Ovp2Q2MU2l9F0+Sh+/WGAv7OakoazTp0FnFOZLPJbqOlanw1zYDbtr4uqORV6m7VUUXOtNAiBBNm4DdfIobAPTBaz/pw9CtpZOATfZ1RwvMBEaAOAnth4vuUtWNBY7nUcHOJf2Gqg3peQe/QvXdzOxuoIxKySwnBuyRqi2Cpt+Xko+7loo46we8JLECoFVF7b1ebEXM0rIypawKqA3Z1+4v2MvxElcoU+/zivPOWx27RcJosvmjQLIZ8KhwRxkT/k0WqU0Rg0hmR4/2nzACMvGSNVYTVMqnQh1l4B54rWpn1jXJc+jVy+JzIZ8wlBfddmfl8u6sTJAztSaxOtBoDxe+p2auiAEAAQA= administrator@unknown]
+WARNING | The emulator now requires a signed jwt token for gRPC access! Use the -grpc flag if you really want an open unprotected grpc port
+INFO    | Using security allow list from: /home/administrator/Android/Sdk/emulator/lib/emulator_access.json
+WARNING | *** Basic token auth should only be used by android-studio ***
+INFO    | The active JSON Web Key Sets can be found here: /run/user/1000/avd/running/65797/jwks/1fde732e-d9ca-4341-848e-49acb45f8f9b/active.jwk
+INFO    | Scanning /run/user/1000/avd/running/65797/jwks/1fde732e-d9ca-4341-848e-49acb45f8f9b for jwk keys.
+INFO    | Started GRPC server at 127.0.0.1:8554, security: Local, auth: +token
+INFO    | Advertising in: /run/user/1000/avd/running/pid_65797.ini
+I0327 15:01:23.364718   65840 FrameBuffer.cpp:3707] setDisplayConfigs w 1080 h 2400 dpiX 420 dpiY 420
+I0327 15:01:23.364750   65840 FrameBuffer.cpp:3720] setDisplayActiveConfig 0
+WARNING | Cold boot:  requested by the user
+INFO    | Activated packet streamer for bluetooth emulation
+INFO    | Boot completed in 26950 ms
+INFO    | Increasing screen off timeout, logcat buffer size to 2M.
