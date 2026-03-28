@@ -7,7 +7,7 @@ import {NativeCallScreening} from '../services/NativeCallScreening';
 import {SettingsScreenStyles as styles} from '../styles';
 
 export const SettingsScreen = () => {
-  const {settings, updateSettings} = useApp();
+  const {settings, updateSettings, callLogs} = useApp();
   const [strictnessInput, setStrictnessInput] = React.useState(
     settings.rating.toString(),
   );
@@ -53,6 +53,9 @@ export const SettingsScreen = () => {
       setHasRole(true);
     }
   };
+
+  const blockedCount = callLogs.filter(log => log.action === 'BLOCKED').length;
+  const allowedCount = callLogs.filter(log => log.action === 'ALLOWED').length;
 
   return (
     <View style={styles.container}>
@@ -156,8 +159,8 @@ export const SettingsScreen = () => {
                 />
               </View>
               <View style={{marginTop: 12}}>
-                <Text style={styles.statNumber}>24</Text>
-                <Text style={styles.statLabel}>BLOCKED TODAY</Text>
+                <Text style={styles.statNumber}>{blockedCount}</Text>
+                <Text style={styles.statLabel}>BLOCKED</Text>
               </View>
             </Surface>
 
@@ -170,8 +173,8 @@ export const SettingsScreen = () => {
                 />
               </View>
               <View style={{marginTop: 12}}>
-                <Text style={styles.statNumber}>12</Text>
-                <Text style={styles.statLabel}>ALLOWED TODAY</Text>
+                <Text style={styles.statNumber}>{allowedCount}</Text>
+                <Text style={styles.statLabel}>ALLOWED</Text>
               </View>
             </Surface>
           </View>

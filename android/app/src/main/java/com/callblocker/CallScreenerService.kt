@@ -8,10 +8,44 @@ import android.telecom.Call
 import android.telecom.CallScreeningService
 import android.util.Log
 import org.json.JSONArray
+import android.database.sqlite.SQLiteDatabase
 
 class CallScreenerService : CallScreeningService() {
     companion object {
         const val TAG = "CallScreenerService"
+    }
+
+    private fun logCallAsync(incomingNumber: String, matchedPattern: String, similarity: Double, action: String) {
+        Thread {
+            try {
+                val dbPath = getDatabasePath("CallBlocker.db").absolutePath
+                val db = SQLiteDatabase.openOrCreateDatabase(dbPath, null)
+                
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS call_logs (
+                      id INTEGER PRIMARY KEY AUTOINCREMENT,
+                      incomingNumber TEXT NOT NULL,
+                      matchedPattern TEXT,
+                      similarity REAL,
+                      action TEXT NOT NULL,
+                      timestamp INTEGER NOT NULL
+                    );
+                """.trimIndent())
+
+                val values = ContentValues().apply {
+                    put("incomingNumber", incomingNumber)
+                    put("matchedPattern", matchedPattern)
+                    put("similarity", similarity)
+                    put("action", action)
+                    put("timestamp", System.currentTimeMillis())
+                }
+                db.insert("call_logs", null, values)
+                db.close()
+                Log.d(TAG, "Call logged to internal SQLite successfully")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to log call to SQLite", e)
+            }
+        }.start()
     }
 
     override fun onScreenCall(callDetails: Call.Details) {
@@ -42,6 +76,8 @@ class CallScreenerService : CallScreeningService() {
         val blockedNumbersStr = prefs.getString("blockedNumbers", "[]")
 
         var shouldBlock = false
+        var matchedPattern = "None"
+        var maxSimilarity = 0.0
 
         try {
             val jsonArray = JSONArray(blockedNumbersStr)
@@ -53,8 +89,12 @@ class CallScreenerService : CallScreeningService() {
                 val similarity = MatchingEngine.calculateSimilarityPercentage(normalizedIncoming, normalizedTarget)
                 if (similarity >= strictnessRating) {
                     shouldBlock = true
+                    matchedPattern = rawNumber
+                    maxSimilarity = similarity
                     Log.d(TAG, "Call from \$incomingNumber blocked! Matched \$rawNumber with similarity \$similarity%")
                     break
+                } else if (similarity > maxSimilarity) {
+                    maxSimilarity = similarity
                 }
             }
         } catch (e: Exception) {
@@ -62,19 +102,20 @@ class CallScreenerService : CallScreeningService() {
         }
 
         if (shouldBlock) {
-            // Silently reject the call
+            // Silently reject the call ASAP
             val response = CallResponse.Builder()
                 .setDisallowCall(true)
                 .setRejectCall(true)
                 .setSkipNotification(true)
-                .setSkipCallLog(false) // Optionally keep it in the native log
+                .setSkipCallLog(false)
                 .build()
                 
             respondToCall(callDetails, response)
 
-            // Add the number to Android's built-in blocked list if permission allows
-            if (BlockedNumberContract.canCurrentUserBlockNumbers(this)) {
+            // Add the number to Android's built-in blocked list on a background thread
+            Thread {
                 try {
+                    // Cố gắng insert thẳng (cấu hình OS cho Caller ID role đôi khi không bắt required permission)
                     val values = ContentValues().apply {
                         put(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER, incomingNumber)
                     }
@@ -83,10 +124,14 @@ class CallScreenerService : CallScreeningService() {
                 } catch (e: Exception) {
                     Log.e(TAG, "Failed to add number to system block list", e)
                 }
-            }
+            }.start()
+            
+            // Log to local Database on a background thread
+            logCallAsync(incomingNumber, matchedPattern, maxSimilarity, "BLOCKED")
         } else {
-            // Allow the call
+            // Allow the call ASAP
             respondToCall(callDetails, CallResponse.Builder().build())
+            logCallAsync(incomingNumber, "None", maxSimilarity, "ALLOWED")
         }
     }
 }

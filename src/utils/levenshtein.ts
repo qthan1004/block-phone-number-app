@@ -56,6 +56,14 @@ export const calculateSimilarityPercentage = (a: string, b: string): number => {
   if (a === b) {
     return 100;
   }
+  // Wildcard Prefix Matching Rule
+  if (b.endsWith('*')) {
+    const prefix = b.slice(0, -1);
+    if (a.startsWith(prefix)) {
+      return 100;
+    }
+  }
+
   if (a.length === 0 && b.length === 0) {
     return 100;
   }

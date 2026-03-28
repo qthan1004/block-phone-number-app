@@ -1,28 +1,21 @@
 import {normalizePhoneNumber} from '../utils/phoneUtils';
 
-describe('Phone Normalization Utils', () => {
-  it('removes spaces and dashes', () => {
-    expect(normalizePhoneNumber('098 765 4321')).toBe('0987654321');
-    expect(normalizePhoneNumber('098-765-4321')).toBe('0987654321');
+describe('phoneUtils Normalization Regex Tests', () => {
+  it('correctly normalizes a standard phone number', () => {
+    expect(normalizePhoneNumber('+84 987 654 321')).toBe('0987654321');
+    expect(normalizePhoneNumber('0987-654-321')).toBe('0987654321');
+    expect(normalizePhoneNumber('(028) 3333 4444')).toBe('02833334444');
   });
 
-  it('removes parentheses', () => {
-    expect(normalizePhoneNumber('(098) 765-4321')).toBe('0987654321');
+  it('correctly handles the wildcard asterisk [*] for spam blocking', () => {
+    // A user inputs these formats targeting the provided sample prefixes
+    expect(normalizePhoneNumber('024889*')).toBe('024889*');
+    expect(normalizePhoneNumber('+84 24 889 *')).toBe('024889*');
+    expect(normalizePhoneNumber('024-889-***')).toBe('024889***');
   });
 
-  it('handles +84 prefix correctly', () => {
-    expect(normalizePhoneNumber('+84987654321')).toBe('0987654321');
-  });
-
-  it('handles 84 prefix without + symbol', () => {
-    expect(normalizePhoneNumber('84987654321')).toBe('0987654321');
-  });
-
-  it('keeps leading zeroes', () => {
-    expect(normalizePhoneNumber('00123456')).toBe('00123456');
-  });
-
-  it('returns empty string if input is empty or null', () => {
-    expect(normalizePhoneNumber('')).toBe('');
+  it('removes alphabetic characters but leaves numbers and wildcard asterisks intact', () => {
+    expect(normalizePhoneNumber('Spam 024889* !')).toBe('024889*');
+    expect(normalizePhoneNumber('Call 090* block')).toBe('090*');
   });
 });

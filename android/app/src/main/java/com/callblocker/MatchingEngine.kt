@@ -18,8 +18,8 @@ object MatchingEngine {
             return ""
         }
 
-        // Remove all non-digit and non-plus characters
-        var normalized = phone.replace(Regex("[^\\d+]"), "")
+        // Remove all non-digit, non-plus, and non-asterisk characters
+        var normalized = phone.replace(Regex("[^\\d+*]"), "")
 
         // Replace +84 prefix with 0
         if (normalized.startsWith("+84")) {
@@ -74,6 +74,13 @@ object MatchingEngine {
      */
     fun calculateSimilarityPercentage(a: String, b: String): Double {
         if (a == b) return 100.0
+        
+        // Wildcard Prefix Matching Rule
+        if (b.endsWith("*")) {
+            val prefix = b.dropLast(1)
+            if (a.startsWith(prefix)) return 100.0
+        }
+
         if (a.isEmpty() && b.isEmpty()) return 100.0
         if (a.isEmpty() || b.isEmpty()) return 0.0
 

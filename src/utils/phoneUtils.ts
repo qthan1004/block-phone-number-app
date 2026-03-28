@@ -11,8 +11,8 @@ export const normalizePhoneNumber = (phone: string): string => {
     return '';
   }
 
-  // Remove all non-digit and non-plus characters
-  let normalized = phone.replace(/[^\d+]/g, '');
+  // Remove all non-digit, non-plus, and non-asterisk characters
+  let normalized = phone.replace(/[^\d+*]/g, '');
 
   // Replace +84 prefix with 0
   if (normalized.startsWith('+84')) {

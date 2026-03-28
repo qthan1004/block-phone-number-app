@@ -78,11 +78,11 @@ class CallScreeningModule(reactContext: ReactApplicationContext) : ReactContextB
             // Parse simple settings string if it's JSON
             try {
                 val settingsJson = org.json.JSONObject(settingsStr)
-                if (settingsJson.has("strictness")) {
-                    editor.putInt("strictnessRating", settingsJson.getInt("strictness"))
+                if (settingsJson.has("rating")) {
+                    editor.putInt("strictnessRating", settingsJson.getInt("rating"))
                 }
-                if (settingsJson.has("serviceEnabled")) {
-                    editor.putBoolean("serviceEnabled", settingsJson.getBoolean("serviceEnabled"))
+                if (settingsJson.has("isServiceEnabled")) {
+                    editor.putBoolean("serviceEnabled", settingsJson.getBoolean("isServiceEnabled"))
                 }
             } catch (e: Exception) {
                 // Ignore parse errors, just don't update settings

@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
 } from 'react-native';
 import {Text} from 'react-native-paper';
@@ -34,11 +35,11 @@ export const NumberFormScreen = ({navigation, route}: any) => {
     }
     setErrorMsg('');
 
-    const normalized = targetSequence.replace(/[^\d+]/gi, '').toUpperCase();
+    const normalized = targetSequence.replace(/[^\d+*]/gi, '').toUpperCase();
 
-    // Validate if normalized has actual numbers
-    if (!/\d/.test(normalized) && normalized !== '') {
-      setErrorMsg('Please enter a valid phone number.');
+    // Validate if normalized has actual numbers (or asterisks)
+    if (!/[\d*]/.test(normalized) && normalized !== '') {
+      setErrorMsg('Please enter a valid phone number or wildcard pattern.');
       return;
     }
 
@@ -80,7 +81,10 @@ export const NumberFormScreen = ({navigation, route}: any) => {
         </View>
 
         {/* Scrollable Form */}
-        <View style={styles.formArea}>
+        <ScrollView
+          style={styles.formArea}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
           {/* Input Area */}
           <View style={styles.inputSection}>
             <Text style={styles.inputLabel}>SAMPLE NUMBER</Text>
@@ -99,7 +103,7 @@ export const NumberFormScreen = ({navigation, route}: any) => {
                 placeholderTextColor="#8D93A580"
                 value={targetSequence}
                 onChangeText={txt => {
-                  const filtered = txt.replace(/[^0-9+\s]/g, '');
+                  const filtered = txt.replace(/[^0-9+*\s]/g, '');
                   setTargetSequence(filtered);
                   setErrorMsg('');
                 }}
@@ -128,7 +132,7 @@ export const NumberFormScreen = ({navigation, route}: any) => {
               />
             </View>
           </View>
-        </View>
+        </ScrollView>
 
         {/* Footer */}
         <View style={styles.footer}>
