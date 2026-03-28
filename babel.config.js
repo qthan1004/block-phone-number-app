@@ -12,9 +12,9 @@ module.exports = {
           '@services': './src/services',
           '@utils': './src/utils',
           '@contexts': './src/contexts',
-          '@types': './src/types'
-        }
-      }
-    ]
-  ]
+          '@types': './src/types',
+        },
+      },
+    ],
+  ],
 };

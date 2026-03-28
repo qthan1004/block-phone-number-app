@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BlockedNumber, AppSettings, STORAGE_KEYS } from '../types';
+import {BlockedNumber, AppSettings, STORAGE_KEYS} from '../types';
 
 // Cấu hình cài đặt mặc định áp dụng khi người dùng cài app lần đầu tiên
 const DEFAULT_SETTINGS: AppSettings = {
@@ -26,7 +26,7 @@ export const StorageService = {
     try {
       const data = await AsyncStorage.getItem(STORAGE_KEYS.SETTINGS);
       if (data) {
-        return { ...DEFAULT_SETTINGS, ...JSON.parse(data) };
+        return {...DEFAULT_SETTINGS, ...JSON.parse(data)};
       }
       return DEFAULT_SETTINGS;
     } catch (e) {
@@ -42,8 +42,11 @@ export const StorageService = {
   async updateSettings(settings: Partial<AppSettings>): Promise<void> {
     try {
       const current = await this.getSettings();
-      const updated = { ...current, ...settings };
-      await AsyncStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(updated));
+      const updated = {...current, ...settings};
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.SETTINGS,
+        JSON.stringify(updated),
+      );
     } catch (e) {
       console.error('Lỗi khi lưu cài đặt vào bộ nhớ:', e);
       throw e;
@@ -77,7 +80,10 @@ export const StorageService = {
     try {
       const current = await this.getBlockedNumbers();
       current.push(number);
-      await AsyncStorage.setItem(STORAGE_KEYS.BLOCKED_NUMBERS, JSON.stringify(current));
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.BLOCKED_NUMBERS,
+        JSON.stringify(current),
+      );
     } catch (e) {
       console.error('Lỗi khi thêm số vào danh sách:', e);
       throw e;
@@ -87,16 +93,22 @@ export const StorageService = {
   /**
    * Sửa cấu hình một số điện thoại đã nằm trong danh sách dựa theo "id" (UUID)
    */
-  async updateBlockedNumber(id: string, data: Partial<BlockedNumber>): Promise<void> {
+  async updateBlockedNumber(
+    id: string,
+    data: Partial<BlockedNumber>,
+  ): Promise<void> {
     try {
       const current = await this.getBlockedNumbers();
       const index = current.findIndex(n => n.id === id);
-      
+
       // Nếu tìm thấy item trong danh sách
       if (index > -1) {
         // Cập nhật record với data mới và tick lại Timestamp sửa đổi mới nhất
-        current[index] = { ...current[index], ...data, updatedAt: Date.now() };
-        await AsyncStorage.setItem(STORAGE_KEYS.BLOCKED_NUMBERS, JSON.stringify(current));
+        current[index] = {...current[index], ...data, updatedAt: Date.now()};
+        await AsyncStorage.setItem(
+          STORAGE_KEYS.BLOCKED_NUMBERS,
+          JSON.stringify(current),
+        );
       }
     } catch (e) {
       console.error('Lỗi khi cập nhật số bị chặn:', e);
@@ -112,10 +124,13 @@ export const StorageService = {
       const current = await this.getBlockedNumbers();
       // Loại bỏ chính record có chứa `id`
       const updated = current.filter(n => n.id !== id);
-      await AsyncStorage.setItem(STORAGE_KEYS.BLOCKED_NUMBERS, JSON.stringify(updated));
+      await AsyncStorage.setItem(
+        STORAGE_KEYS.BLOCKED_NUMBERS,
+        JSON.stringify(updated),
+      );
     } catch (e) {
       console.error('Lỗi khi xóa tài nguyên chặn:', e);
       throw e;
     }
-  }
+  },
 };

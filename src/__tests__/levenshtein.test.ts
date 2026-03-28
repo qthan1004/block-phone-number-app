@@ -1,4 +1,7 @@
-import { calculateLevenshteinDistance, calculateSimilarityPercentage } from '../utils/levenshtein';
+import {
+  calculateLevenshteinDistance,
+  calculateSimilarityPercentage,
+} from '../utils/levenshtein';
 
 describe('Levenshtein Distance Utils', () => {
   describe('calculateLevenshteinDistance', () => {

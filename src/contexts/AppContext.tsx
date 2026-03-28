@@ -64,11 +64,32 @@ export const AppProvider = ({children}: {children: ReactNode}) => {
       // INJECT MOCK DATA IF EMPTY (For UI Testing)
       if (loadedNumbers.length === 0) {
         loadedNumbers = [
-          { id: 'm1', label: 'Spam Call Center', rawNumber: '0987654321', phoneNumber: '0987654321', createdAt: Date.now(), updatedAt: Date.now() },
-          { id: 'm2', label: 'Marketing Sample', rawNumber: '0281234567', phoneNumber: '0281234567', createdAt: Date.now(), updatedAt: Date.now() },
-          { id: 'm3', label: 'Scam Sample Match', rawNumber: '+84 123 456 789', phoneNumber: '0123456789', createdAt: Date.now(), updatedAt: Date.now() }
+          {
+            id: 'm1',
+            label: 'Spam Call Center',
+            rawNumber: '0987654321',
+            phoneNumber: '0987654321',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          },
+          {
+            id: 'm2',
+            label: 'Marketing Sample',
+            rawNumber: '0281234567',
+            phoneNumber: '0281234567',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          },
+          {
+            id: 'm3',
+            label: 'Scam Sample Match',
+            rawNumber: '+84 123 456 789',
+            phoneNumber: '0123456789',
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          },
         ];
-        // Import AsyncStorage directly if needed, or bypass. 
+        // Import AsyncStorage directly if needed, or bypass.
         // We can just rely on state for mocks without saving them, or just use a loop:
         for (const m of loadedNumbers) {
           await StorageService.addBlockedNumber(m);
@@ -77,9 +98,30 @@ export const AppProvider = ({children}: {children: ReactNode}) => {
 
       // Generate some mock Call Logs if empty (We don't persist this mock log here, just state)
       const mockLogs: CallLogEntry[] = [
-        { id: 1, incomingNumber: '0987654321', matchedPattern: '0987654321', similarity: 100, action: 'BLOCKED', timestamp: Date.now() - 3600000 },
-        { id: 2, incomingNumber: '0901234567', matchedPattern: 'None', similarity: 0, action: 'ALLOWED', timestamp: Date.now() - 7200000 },
-        { id: 3, incomingNumber: '02899998888', matchedPattern: '028*', similarity: 100, action: 'BLOCKED', timestamp: Date.now() - 86400000 },
+        {
+          id: 1,
+          incomingNumber: '0987654321',
+          matchedPattern: '0987654321',
+          similarity: 100,
+          action: 'BLOCKED',
+          timestamp: Date.now() - 3600000,
+        },
+        {
+          id: 2,
+          incomingNumber: '0901234567',
+          matchedPattern: 'None',
+          similarity: 0,
+          action: 'ALLOWED',
+          timestamp: Date.now() - 7200000,
+        },
+        {
+          id: 3,
+          incomingNumber: '02899998888',
+          matchedPattern: '028*',
+          similarity: 100,
+          action: 'BLOCKED',
+          timestamp: Date.now() - 86400000,
+        },
       ];
       if (loadedSettings) {
         setSettings(loadedSettings);
@@ -100,11 +142,46 @@ export const AppProvider = ({children}: {children: ReactNode}) => {
       const logs = await DatabaseService.getCallLogs();
       if (logs.length === 0) {
         const mockLogs: CallLogEntry[] = [
-          { id: 1, incomingNumber: '+84 987 654 321', matchedPattern: '0987654321', similarity: 100, action: 'BLOCKED', timestamp: Date.now() - 1000 * 60 * 5 },
-          { id: 2, incomingNumber: '028 3333 4444', matchedPattern: '028*', similarity: 85, action: 'BLOCKED', timestamp: Date.now() - 1000 * 60 * 60 * 2 },
-          { id: 3, incomingNumber: '090 123 4567', matchedPattern: 'None', similarity: 20, action: 'ALLOWED', timestamp: Date.now() - 1000 * 60 * 60 * 5 },
-          { id: 4, incomingNumber: '+1 800 555 0199', matchedPattern: 'None', similarity: 0, action: 'ALLOWED', timestamp: Date.now() - 1000 * 60 * 60 * 24 },
-          { id: 5, incomingNumber: '0899 999 999', matchedPattern: '089*', similarity: 90, action: 'BLOCKED', timestamp: Date.now() - 1000 * 60 * 60 * 48 },
+          {
+            id: 1,
+            incomingNumber: '+84 987 654 321',
+            matchedPattern: '0987654321',
+            similarity: 100,
+            action: 'BLOCKED',
+            timestamp: Date.now() - 1000 * 60 * 5,
+          },
+          {
+            id: 2,
+            incomingNumber: '028 3333 4444',
+            matchedPattern: '028*',
+            similarity: 85,
+            action: 'BLOCKED',
+            timestamp: Date.now() - 1000 * 60 * 60 * 2,
+          },
+          {
+            id: 3,
+            incomingNumber: '090 123 4567',
+            matchedPattern: 'None',
+            similarity: 20,
+            action: 'ALLOWED',
+            timestamp: Date.now() - 1000 * 60 * 60 * 5,
+          },
+          {
+            id: 4,
+            incomingNumber: '+1 800 555 0199',
+            matchedPattern: 'None',
+            similarity: 0,
+            action: 'ALLOWED',
+            timestamp: Date.now() - 1000 * 60 * 60 * 24,
+          },
+          {
+            id: 5,
+            incomingNumber: '0899 999 999',
+            matchedPattern: '089*',
+            similarity: 90,
+            action: 'BLOCKED',
+            timestamp: Date.now() - 1000 * 60 * 60 * 48,
+          },
         ];
         setCallLogs(mockLogs);
       } else {

@@ -9,17 +9,19 @@ import {
 import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useApp} from '../contexts/AppContext';
-import { NumberFormScreenStyles as styles } from '../styles';
+import {NumberFormScreenStyles as styles} from '../styles';
 
 export const NumberFormScreen = ({navigation, route}: any) => {
   const {addBlockedNumber, updateBlockedNumber} = useApp();
-  
+
   const editingRule = route.params?.rule;
   const isEditing = !!editingRule;
 
-  const [targetSequence, setTargetSequence] = useState(editingRule?.rawNumber || '');
+  const [targetSequence, setTargetSequence] = useState(
+    editingRule?.rawNumber || '',
+  );
   const [label, setLabel] = useState(editingRule?.label || '');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [, setErrorMsg] = useState('');
 
   const generateId = () =>
     Date.now().toString() + Math.random().toString(36).substring(2);
@@ -33,7 +35,7 @@ export const NumberFormScreen = ({navigation, route}: any) => {
     setErrorMsg('');
 
     const normalized = targetSequence.replace(/[^\d+]/gi, '').toUpperCase();
-    
+
     // Validate if normalized has actual numbers
     if (!/\d/.test(normalized) && normalized !== '') {
       setErrorMsg('Please enter a valid phone number.');
@@ -67,7 +69,9 @@ export const NumberFormScreen = ({navigation, route}: any) => {
       <View style={styles.content}>
         {/* Header matching CallLog header style but customized */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>{isEditing ? 'Edit Rule' : 'New Rule'}</Text>
+          <Text style={styles.headerTitle}>
+            {isEditing ? 'Edit Rule' : 'New Rule'}
+          </Text>
           <TouchableOpacity
             style={styles.closeBtn}
             onPress={() => navigation.goBack()}>
@@ -89,11 +93,12 @@ export const NumberFormScreen = ({navigation, route}: any) => {
                 />
               </View>
               <TextInput
+                testID="input-phone"
                 style={styles.hugeInput}
                 placeholder="+84 987 654 321"
                 placeholderTextColor="#8D93A580"
                 value={targetSequence}
-                onChangeText={(txt) => {
+                onChangeText={txt => {
                   const filtered = txt.replace(/[^0-9+\s]/g, '');
                   setTargetSequence(filtered);
                   setErrorMsg('');
@@ -105,7 +110,8 @@ export const NumberFormScreen = ({navigation, route}: any) => {
               />
             </View>
             <Text style={styles.inputHelp}>
-              Enter a sample phone number. Incoming calls similar to this number will be blocked based on your Strictness setting.
+              Enter a sample phone number. Incoming calls similar to this number
+              will be blocked based on your Strictness setting.
             </Text>
           </View>
 
@@ -113,6 +119,7 @@ export const NumberFormScreen = ({navigation, route}: any) => {
             <Text style={styles.inputLabel}>NAME (OPTIONAL)</Text>
             <View style={styles.inputContainer}>
               <TextInput
+                testID="input-label"
                 style={styles.normalInput}
                 placeholder="e.g. Spam Caller"
                 placeholderTextColor="#8D93A580"
@@ -126,6 +133,7 @@ export const NumberFormScreen = ({navigation, route}: any) => {
         {/* Footer */}
         <View style={styles.footer}>
           <TouchableOpacity
+            testID="btn-deploy"
             style={[
               styles.deployBtn,
               !targetSequence && styles.deployBtnDisabled,

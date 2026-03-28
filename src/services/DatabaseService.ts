@@ -1,5 +1,9 @@
-import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-import { CallLogEntry } from '../types';
+import {
+  enablePromise,
+  openDatabase,
+  SQLiteDatabase,
+} from 'react-native-sqlite-storage';
+import {CallLogEntry} from '../types';
 
 // Bật hỗ trợ Promise cho SQLite Native Module để sử dụng async/await dễ dàng hơn thay vì Callback
 enablePromise(true);
@@ -8,18 +12,17 @@ const DATABASE_NAME = 'CallBlocker.db';
 
 /**
  * DatabaseService: Quản lý Engine xử lý cơ sở dữ liệu (Database) cục bộ trên Phone.
- * Bằng việc sử dụng SQLite, việc hiển thị cũng như lưu lại Call Log (vốn có thể lên tới 
+ * Bằng việc sử dụng SQLite, việc hiển thị cũng như lưu lại Call Log (vốn có thể lên tới
  * hàng trăm hoặc nghìn record) sẽ chạy rất nhanh, hỗ trợ Query Filter/Limit so với
  * lưu dạng Array cứng ở AsyncStorage.
  */
 export const DatabaseService = {
-  
   /**
    * Kết nối hoặc tạo một file kết nối chung (connection pool) tới SQLite App Folder.
    * `location: 'default'` trỏ File lưu tại Local Data / Documents trên điện thoại Android/iOS
    */
   async getDBConnection(): Promise<SQLiteDatabase> {
-    return openDatabase({ name: DATABASE_NAME, location: 'default' });
+    return openDatabase({name: DATABASE_NAME, location: 'default'});
   },
 
   /**
@@ -76,8 +79,11 @@ export const DatabaseService = {
   async getCallLogs(limit: number = 100): Promise<CallLogEntry[]> {
     try {
       const db = await this.getDBConnection();
-      const [results] = await db.executeSql(`SELECT * FROM call_logs ORDER BY timestamp DESC LIMIT ?`, [limit]);
-      
+      const [results] = await db.executeSql(
+        'SELECT * FROM call_logs ORDER BY timestamp DESC LIMIT ?',
+        [limit],
+      );
+
       const logs: CallLogEntry[] = [];
       // Cursor Loop: Fetch từng item do DB trả về đưa vào JS object
       for (let i = 0; i < results.rows.length; i++) {
@@ -96,10 +102,10 @@ export const DatabaseService = {
   async clearCallLogs(): Promise<void> {
     try {
       const db = await this.getDBConnection();
-      await db.executeSql(`DELETE FROM call_logs`);
+      await db.executeSql('DELETE FROM call_logs');
     } catch (error) {
       console.error('Lỗi khi xóa bảng Call Logs SQLite:', error);
       throw error;
     }
-  }
+  },
 };

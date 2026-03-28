@@ -18,10 +18,18 @@ export const NumberListScreen = ({navigation}: any) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const confirmDelete = (id: string) => {
-    Alert.alert('Delete Rule', 'Are you sure you want to remove this blocked number rule?', [
-      {text: 'Cancel', style: 'cancel'},
-      {text: 'Delete', style: 'destructive', onPress: () => deleteBlockedNumber(id)},
-    ]);
+    Alert.alert(
+      'Delete Rule',
+      'Are you sure you want to remove this blocked number rule?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => deleteBlockedNumber(id),
+        },
+      ],
+    );
   };
 
   const filteredNumbers = blockedNumbers.filter(
@@ -76,11 +84,23 @@ export const NumberListScreen = ({navigation}: any) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
-            <TouchableOpacity onPress={() => navigation.navigate('NumberForm', { rule: item })}>
-              <MaterialCommunityIcons name="pencil-outline" size={24} color="#8D93A5" />
+            <TouchableOpacity
+              testID={`edit-button-${item.rawNumber}`}
+              onPress={() => navigation.navigate('NumberForm', {rule: item})}>
+              <MaterialCommunityIcons
+                name="pencil-outline"
+                size={24}
+                color="#8D93A5"
+              />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => confirmDelete(item.id)}>
-              <MaterialCommunityIcons name="delete-outline" size={24} color="#FF5A5F" />
+            <TouchableOpacity
+              testID={`delete-button-${item.rawNumber}`}
+              onPress={() => confirmDelete(item.id)}>
+              <MaterialCommunityIcons
+                name="delete-outline"
+                size={24}
+                color="#FF5A5F"
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -119,6 +139,7 @@ export const NumberListScreen = ({navigation}: any) => {
 
       <TouchableOpacity
         style={styles.fab}
+        testID="add-fab"
         activeOpacity={0.8}
         onPress={() => navigation.navigate('NumberForm')}>
         <MaterialCommunityIcons name="plus" size={32} color="#FFFFFF" />

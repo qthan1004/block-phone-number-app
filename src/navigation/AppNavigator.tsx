@@ -24,6 +24,18 @@ export type RootStackParamList = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const DashboardIcon = ({color}: {color: string}) => (
+  <MaterialCommunityIcons name="shield-outline" color={color} size={28} />
+);
+
+const BlocklistIcon = ({color}: {color: string}) => (
+  <MaterialCommunityIcons name="format-list-bulleted" color={color} size={28} />
+);
+
+const CallLogIcon = ({color}: {color: string}) => (
+  <MaterialCommunityIcons name="history" color={color} size={28} />
+);
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -59,13 +71,7 @@ const TabNavigator = () => {
         component={SettingsScreen}
         options={{
           title: 'Dashboard',
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="shield-outline"
-              color={color}
-              size={28}
-            />
-          ),
+          tabBarIcon: DashboardIcon,
         }}
       />
       <Tab.Screen
@@ -73,13 +79,7 @@ const TabNavigator = () => {
         component={NumberListScreen}
         options={{
           title: 'Blocklist',
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons
-              name="format-list-bulleted"
-              color={color}
-              size={28}
-            />
-          ),
+          tabBarIcon: BlocklistIcon,
         }}
       />
       <Tab.Screen
@@ -87,9 +87,7 @@ const TabNavigator = () => {
         component={CallLogScreen}
         options={{
           title: 'Call Log',
-          tabBarIcon: ({color, size}) => (
-            <MaterialCommunityIcons name="history" color={color} size={28} />
-          ),
+          tabBarIcon: CallLogIcon,
         }}
       />
     </Tab.Navigator>

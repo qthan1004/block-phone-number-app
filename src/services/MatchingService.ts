@@ -1,6 +1,6 @@
-import { BlockedNumber, AppSettings } from '../types';
-import { calculateSimilarityPercentage } from '../utils/levenshtein';
-import { normalizePhoneNumber } from '../utils/phoneUtils';
+import {BlockedNumber, AppSettings} from '../types';
+import {calculateSimilarityPercentage} from '../utils/levenshtein';
+import {normalizePhoneNumber} from '../utils/phoneUtils';
 
 export interface MatchResult {
   isBlocked: boolean;
@@ -22,34 +22,39 @@ export class MatchingService {
   static checkCall(
     incomingNumber: string,
     blockedNumbers: BlockedNumber[],
-    settings: AppSettings
+    settings: AppSettings,
   ): MatchResult {
     // Bỏ qua nếu ứng dụng đang bị vô hiệu hóa
     if (!settings.isServiceEnabled) {
-      return { isBlocked: false, similarity: 0 };
+      return {isBlocked: false, similarity: 0};
     }
 
     const normalizedIncoming = normalizePhoneNumber(incomingNumber);
     if (!normalizedIncoming) {
-      return { isBlocked: false, similarity: 0 };
+      return {isBlocked: false, similarity: 0};
     }
 
     let highestSimilarity = 0;
-    let fallbackResult: MatchResult = { isBlocked: false, similarity: 0 };
+    let fallbackResult: MatchResult = {isBlocked: false, similarity: 0};
 
     for (const blocked of blockedNumbers) {
       const normalizedPattern = normalizePhoneNumber(blocked.rawNumber);
-      if (!normalizedPattern) continue;
+      if (!normalizedPattern) {
+        continue;
+      }
 
-      const similarity = calculateSimilarityPercentage(normalizedIncoming, normalizedPattern);
-      
+      const similarity = calculateSimilarityPercentage(
+        normalizedIncoming,
+        normalizedPattern,
+      );
+
       if (similarity > highestSimilarity) {
         highestSimilarity = similarity;
         fallbackResult = {
           isBlocked: similarity >= settings.rating,
           similarity,
           matchedPattern: blocked.rawNumber,
-          matchedConfigName: blocked.label || 'Unknown Rule'
+          matchedConfigName: blocked.label || 'Unknown Rule',
         };
       }
 

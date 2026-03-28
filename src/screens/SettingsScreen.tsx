@@ -94,6 +94,7 @@ export const SettingsScreen = () => {
               </View>
               <View style={styles.inputWrapper}>
                 <TextInput
+                  testID="input-strictness"
                   style={styles.strictnessInput}
                   keyboardType="number-pad"
                   maxLength={3}

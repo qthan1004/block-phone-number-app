@@ -1,4 +1,4 @@
-import { normalizePhoneNumber } from '../utils/phoneUtils';
+import {normalizePhoneNumber} from '../utils/phoneUtils';
 
 describe('Phone Normalization Utils', () => {
   it('removes spaces and dashes', () => {
