@@ -8,6 +8,7 @@ import React, {
 import {BlockedNumber, AppSettings, CallLogEntry} from '../types';
 import {StorageService} from '../services/StorageService';
 import {DatabaseService} from '../services/DatabaseService';
+import {NativeCallScreening} from '../services/NativeCallScreening';
 
 /**
  * Interface mô tả luồng Schema "State chung" cho hệ thống,
@@ -204,6 +205,15 @@ export const AppProvider = ({children}: {children: ReactNode}) => {
     };
     init();
   }, []);
+
+  /**
+   * Đồng bộ Data xuống Native Module mỗi khi list bị thay đổi
+   */
+  useEffect(() => {
+    if (!isLoading) {
+      NativeCallScreening.syncData(blockedNumbers, settings);
+    }
+  }, [blockedNumbers, settings, isLoading]);
 
   // === MUTATION ACTIONS (Sửa đổi & Đồng bộ với App Layer) ===
 

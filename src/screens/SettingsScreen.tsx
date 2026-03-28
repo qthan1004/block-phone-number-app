@@ -3,6 +3,7 @@ import {ScrollView, View, TextInput, TouchableOpacity} from 'react-native';
 import {Text, Surface} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useApp} from '../contexts/AppContext';
+import {NativeCallScreening} from '../services/NativeCallScreening';
 import {SettingsScreenStyles as styles} from '../styles';
 
 export const SettingsScreen = () => {
@@ -10,6 +11,11 @@ export const SettingsScreen = () => {
   const [strictnessInput, setStrictnessInput] = React.useState(
     settings.rating.toString(),
   );
+  const [hasRole, setHasRole] = React.useState(false);
+
+  React.useEffect(() => {
+    NativeCallScreening.checkRoleStatus().then(setHasRole);
+  }, []);
 
   React.useEffect(() => {
     setStrictnessInput(settings.rating.toString());
@@ -39,6 +45,13 @@ export const SettingsScreen = () => {
     }
     setStrictnessInput(num.toString());
     updateSettings({rating: num});
+  };
+
+  const handleRequestRole = async () => {
+    const granted = await NativeCallScreening.requestRole();
+    if (granted) {
+      setHasRole(true);
+    }
   };
 
   return (
@@ -104,6 +117,31 @@ export const SettingsScreen = () => {
                 />
                 <Text style={styles.inputSuffix}>%</Text>
               </View>
+            </View>
+          </Surface>
+
+          {/* System Permission */}
+          <Surface style={[styles.card, {marginTop: 16}]}>
+            <View style={styles.cardRow}>
+              <View style={styles.cardTextContainer}>
+                <Text style={styles.cardTitle}>Cấp quyền Hệ thống</Text>
+                <Text style={styles.cardSubtitle}>
+                  Quyền chặn cuộc gọi dưới nền (Caller ID & Spam role)
+                </Text>
+              </View>
+              <TouchableOpacity
+                disabled={hasRole}
+                style={{
+                  backgroundColor: hasRole ? '#2ED299' : '#5c11d4',
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 8,
+                }}
+                onPress={handleRequestRole}>
+                <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 13}}>
+                  {hasRole ? 'ĐÃ BẬT' : 'BẬT QUYỀN'}
+                </Text>
+              </TouchableOpacity>
             </View>
           </Surface>
 
